@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8470142049379665884}
   - component: {fileID: 936066569864601960}
   - component: {fileID: 6642505506550425326}
+  - component: {fileID: 6027535959769798983}
   - component: {fileID: -2162408268075903447}
   m_Layer: 0
   m_Name: HealthPickup
@@ -130,6 +131,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &6027535959769798983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5832289945961407702}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf32b153964e79f44ba98cbd92360c71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &-2162408268075903447
 MonoBehaviour:
   m_ObjectHideFlags: 0

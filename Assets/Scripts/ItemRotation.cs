@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ItemRotation : MonoBehaviour
 {
+    // This rotation method was replaced with using a recorded animation applied to the game object
 
     public int rotationSpeed = 100;
     private Transform _itemTransform;
