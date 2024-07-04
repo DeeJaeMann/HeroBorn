@@ -62,6 +62,10 @@ public class PlayerBehavior : MonoBehaviour
     // Reference to player Rigidbody component
     private Rigidbody _rigidbody;
 
+    // Applied jump force
+    public float jumpVelocity = 5f;
+    private bool _isJumping;
+
     // 2
     // Called before first frame update
     private void Start()
@@ -78,6 +82,13 @@ public class PlayerBehavior : MonoBehaviour
     {
         _vInput = Input.GetAxis("Vertical") * moveSpeed;
         _hInput = Input.GetAxis("Horizontal") * rotateSpeed;
+
+        // Returns the value if the 'J' key is pressed
+        // Only fires once even if held down
+        // |= : logical or condition
+        // Ensures we don't have consecutive input checks overrid each other when the player is jumping
+        // This is performed in the Update() rather than the FixedUpdate() method to prevent input loss or double inputs
+        _isJumping |= Input.GetKeyDown(KeyCode.Space);
     }
 
     // 5
@@ -107,5 +118,15 @@ public class PlayerBehavior : MonoBehaviour
         _rigidbody.MoveRotation(_rigidbody.rotation * angleRot);
 
         // NOTE: MovePosition and MoveRotation work differently on non-kinematic GameObjects
+
+        if (_isJumping)
+        {
+            // Passing Vector3 and ForceMode params to RigidBody.AddForce makes the player jump
+            // The ForceMode param determines how the force is applied. It is an Enum type
+            // Impulse applies instant force to an object while taking it's mass into account
+            _rigidbody.AddForce(Vector3.up * jumpVelocity, ForceMode.Impulse);
+        }
+
+        _isJumping = false;
     }
 }
