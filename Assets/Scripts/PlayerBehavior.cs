@@ -66,6 +66,15 @@ public class PlayerBehavior : MonoBehaviour
     public float jumpVelocity = 5f;
     private bool _isJumping;
 
+    // For checking the distance between player capsuleCollider and groundLayer objects
+    public float distanceToGround = 0.1f;
+
+    // Used for collider detection, can be set in inspector
+    public LayerMask groundLayer;
+
+    // collider component
+    private CapsuleCollider _capsuleCollider;
+
     // 2
     // Called before first frame update
     private void Start()
@@ -74,6 +83,9 @@ public class PlayerBehavior : MonoBehaviour
         // Checks whether the Rigidbody component exists on the GameObject
         // There is no need for error checking as the component is attached to the player object
         _rigidbody = GetComponent<Rigidbody>();
+
+        // Gets the capsule collider attached to the player
+        _capsuleCollider = GetComponent<CapsuleCollider>();
     }
 
     // 4
@@ -119,7 +131,8 @@ public class PlayerBehavior : MonoBehaviour
 
         // NOTE: MovePosition and MoveRotation work differently on non-kinematic GameObjects
 
-        if (_isJumping)
+        // Checks if the player is on the ground and the jump key is pressed
+        if (IsGrounded() && _isJumping)
         {
             // Passing Vector3 and ForceMode params to RigidBody.AddForce makes the player jump
             // The ForceMode param determines how the force is applied. It is an Enum type
@@ -128,5 +141,25 @@ public class PlayerBehavior : MonoBehaviour
         }
 
         _isJumping = false;
+
+    }
+
+    private bool IsGrounded()
+    {
+        // Stores the position at the bottom of the player's capsule Collider to check for collisions with any objects on the ground layer
+        // All collider components have a bounds property which has min, max and center positions of its x, y and z axes
+        // The bottom of the collider is the 3D point at center x, min y and center z
+        Vector3 capsuleBottom = new Vector3(_capsuleCollider.bounds.center.x, _capsuleCollider.bounds.min.y, _capsuleCollider.bounds.center.z);
+
+        // Stores the result of check capsule method from the Physics class
+        // Takes 5 arguments: 
+        //  start of the capsule - set to middle of the capsule collider because we're only checking if the bottom touches the ground
+        //  end of the capsule - set to capsuleBottom (already calculated)
+        //  radius of the capsule - distanceToGround (already set)
+        //  layer mask to check for collisions - groundLayer
+        //  query trigger interaction - determins whether the medthod should ignore colliders that are set as triggers
+        bool grounded = Physics.CheckCapsule(_capsuleCollider.bounds.center, capsuleBottom, distanceToGround, groundLayer, QueryTriggerInteraction.Ignore);
+
+        return grounded;
     }
 }
