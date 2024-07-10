@@ -86,7 +86,7 @@ public class PlayerBehavior : MonoBehaviour
         // Returns the value if the 'J' key is pressed
         // Only fires once even if held down
         // |= : logical or condition
-        // Ensures we don't have consecutive input checks overrid each other when the player is jumping
+        // Ensures we don't have consecutive input checks overriding each other when the player is jumping
         // This is performed in the Update() rather than the FixedUpdate() method to prevent input loss or double inputs
         _isJumping |= Input.GetKeyDown(KeyCode.Space);
     }
