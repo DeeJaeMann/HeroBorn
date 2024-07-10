@@ -75,6 +75,12 @@ public class PlayerBehavior : MonoBehaviour
     // collider component
     private CapsuleCollider _capsuleCollider;
 
+    // stores the bullet prefab
+    public GameObject bullet;
+    public float bulletSpeed = 100f;
+
+    private bool _isShooting;
+
     // 2
     // Called before first frame update
     private void Start()
@@ -95,12 +101,14 @@ public class PlayerBehavior : MonoBehaviour
         _vInput = Input.GetAxis("Vertical") * moveSpeed;
         _hInput = Input.GetAxis("Horizontal") * rotateSpeed;
 
-        // Returns the value if the 'J' key is pressed
+        // Returns the value if the 'Space' key is pressed
         // Only fires once even if held down
         // |= : logical or condition
         // Ensures we don't have consecutive input checks overriding each other when the player is jumping
         // This is performed in the Update() rather than the FixedUpdate() method to prevent input loss or double inputs
+        // the shooting logic is the same as jumping except it's using the right shift key for input
         _isJumping |= Input.GetKeyDown(KeyCode.Space);
+        _isShooting |= Input.GetKeyDown(KeyCode.RightShift);
     }
 
     // 5
@@ -140,7 +148,26 @@ public class PlayerBehavior : MonoBehaviour
             _rigidbody.AddForce(Vector3.up * jumpVelocity, ForceMode.Impulse);
         }
 
+        // Reset jumping state
         _isJumping = false;
+
+        // A new local GameObject variable is created every time the right shift key is spressed
+        // Instatiate is used to assign a game object to newBullet by passing in the bullet prefab. The player position is used
+        // to place the new bullet prefab in front of the player
+        // This is appended as a GameObejct to explicitly cast the return object as the same type as newBullet (GameObject in this case)
+        if (_isShooting)
+        {
+            GameObject newBullet = Instantiate(bullet, this.transform.position + new Vector3(0, 0, 1), this.transform.rotation);
+
+            // Stores a Rigidbody component on newBullet
+            Rigidbody bulletRigidbody = newBullet.GetComponent<Rigidbody>();
+
+            // Set the velocity to the player's transform forward direction multiplied by bulletSpeed
+            bulletRigidbody.velocity = this.transform.forward * bulletSpeed;
+        }
+
+        // Reset shooting state
+        _isShooting = false;
 
     }
 
