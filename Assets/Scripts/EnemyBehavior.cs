@@ -1,15 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI; // Allows access to Unity's navigation classes
 
 public class EnemyBehavior : MonoBehaviour
 {
     public Transform patrolRoute;
     public List<Transform> locations;
 
+    // Current patrol point destination
+    private int _locationIndex = 0;
+    private NavMeshAgent _agent;
+
     private void Start()
     {
+        _agent = GetComponent<NavMeshAgent>();
         InitializePatrolRoute();
+
+        MoveToNextPatrolLocation();
     }
 
     // OnTriggerEnter() is called whenever an object enters this object's Sphere Collider radius
@@ -43,5 +51,13 @@ public class EnemyBehavior : MonoBehaviour
         {
             locations.Add(child);
         }
+    }
+
+    void MoveToNextPatrolLocation()
+    {
+        // Sets destination
+        // destination is a Vector3 position in 3D space
+        // .position references the list element Vector3 position (patrol point)
+        _agent.destination = locations[_locationIndex].position;
     }
 }
