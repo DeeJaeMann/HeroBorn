@@ -1061,6 +1061,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa2ef5f8083a14047ae7ab2b803c6af6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxItems: 4
+  healthText: {fileID: 1408977175}
+  itemText: {fileID: 981802274}
+  progressText: {fileID: 1377555755}
 --- !u!4 &860954788
 Transform:
   m_ObjectHideFlags: 0
