@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;  // To access TMP_Text variable type
+using TMPro;
+using UnityEngine.UI;  // To access TMP_Text and Button types
+using UnityEngine.SceneManagement;
 
 public class GameBehavior : MonoBehaviour
 {
@@ -14,10 +16,20 @@ public class GameBehavior : MonoBehaviour
     public TMP_Text itemText;
     public TMP_Text progressText;
 
+    public Button winButton;
+
     private void Start()
     {
         itemText.text += _itemsCollected;
         healthText.text += _playerHP;
+    }
+
+    public void RestartScene()
+    {
+        // Load the first scene to restart the game
+        SceneManager.LoadScene(0);
+        // Unpause the game
+        Time.timeScale = 1f;
     }
 
     public int Items
@@ -33,13 +45,16 @@ public class GameBehavior : MonoBehaviour
             if (_itemsCollected >= maxItems)
             {
                 progressText.text = "You've found all the items!";
+                winButton.gameObject.SetActive(true);
+
+                // Pause the game to prevent any movement
+                Time.timeScale = 0f;
             }
             else
             {
                 progressText.text = $"Item found, only {maxItems - _itemsCollected} more!";
             }
 
-            //Debug.LogFormat($"Items: {_itemsCollected}");
         }
     }
 
