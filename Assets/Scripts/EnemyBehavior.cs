@@ -8,6 +8,8 @@ public class EnemyBehavior : MonoBehaviour
     public Transform patrolRoute;
     public List<Transform> locations;
 
+    public Transform player;
+
     // Current patrol point destination
     private int _locationIndex = 0;
     private NavMeshAgent _agent;
@@ -15,6 +17,10 @@ public class EnemyBehavior : MonoBehaviour
     private void Start()
     {
         _agent = GetComponent<NavMeshAgent>();
+
+        // Get the player's transform component
+        player = GameObject.Find("Player").transform;
+
         InitializePatrolRoute();
 
         MoveToNextPatrolLocation();
@@ -39,6 +45,8 @@ public class EnemyBehavior : MonoBehaviour
         // We check if the Collider object is the player object
         if ( other.name == "Player")
         {
+            // set the destination to the player
+            _agent.destination = player.position;
             Debug.Log("Player detected - attack!");
         }
     }
