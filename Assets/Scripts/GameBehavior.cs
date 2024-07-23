@@ -17,6 +17,7 @@ public class GameBehavior : MonoBehaviour
     public TMP_Text progressText;
 
     public Button winButton;
+    public Button lossButton;
 
     private void Start()
     {
@@ -67,6 +68,20 @@ public class GameBehavior : MonoBehaviour
 
             healthText.text = $"Health: {HP}";
             Debug.LogFormat($"Lives: {_playerHP}");
+
+            // Check if the player should be dead
+            if(_playerHP <= 0)
+            {
+                // The player died
+                progressText.text = "You want another life with that?";
+                lossButton.gameObject.SetActive(true);
+                Time.timeScale = 0f;
+            }
+            else
+            {
+                // The player took damage
+                progressText.text = "Ouch... that's got to hurt!";
+            }
         }
     }
 }
