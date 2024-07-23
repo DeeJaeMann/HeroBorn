@@ -72,6 +72,8 @@ public class PlayerBehavior : MonoBehaviour
     // Used for collider detection, can be set in inspector
     public LayerMask groundLayer;
 
+    private GameBehavior _gameManager;
+
     // collider component
     private CapsuleCollider _capsuleCollider;
 
@@ -92,6 +94,9 @@ public class PlayerBehavior : MonoBehaviour
 
         // Gets the capsule collider attached to the player
         _capsuleCollider = GetComponent<CapsuleCollider>();
+
+        // Get the GameBehavior script that is attached to the Game Manager
+        _gameManager = GameObject.Find("GameManager").GetComponent<GameBehavior>();
     }
 
     
@@ -169,6 +174,15 @@ public class PlayerBehavior : MonoBehaviour
         // Reset shooting state
         _isShooting = false;
 
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        // If the object we collide with is the enemy, take damage
+        if (collision.gameObject.name == "Enemy")
+        {
+            _gameManager.HP--;
+        }
     }
 
     private bool IsGrounded()
