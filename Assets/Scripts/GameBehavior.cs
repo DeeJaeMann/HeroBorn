@@ -25,6 +25,7 @@ public class GameBehavior : MonoBehaviour
         healthText.text += _playerHP;
     }
 
+
     public void RestartScene()
     {
         // Load the first scene to restart the game
@@ -45,7 +46,8 @@ public class GameBehavior : MonoBehaviour
 
             if (_itemsCollected >= maxItems)
             {
-                progressText.text = "You've found all the items!";
+                //progressText.text = "You've found all the items!";
+                UpdateScene("You've found all the items!");
                 winButton.gameObject.SetActive(true);
 
                 // Pause the game to prevent any movement
@@ -73,7 +75,8 @@ public class GameBehavior : MonoBehaviour
             if(_playerHP <= 0)
             {
                 // The player died
-                progressText.text = "You want another life with that?";
+                //progressText.text = "You want another life with that?";
+                UpdateScene("You want another life with that?");
                 lossButton.gameObject.SetActive(true);
                 Time.timeScale = 0f;
             }
@@ -82,6 +85,13 @@ public class GameBehavior : MonoBehaviour
                 // The player took damage
                 progressText.text = "Ouch... that's got to hurt!";
             }
+
+            Debug.LogFormat($"Lives: {_playerHP}");
         }
+    }
+    public void UpdateScene(string updatedText)
+    {
+        progressText.text = updatedText;
+        Time.timeScale = 0f;
     }
 }
