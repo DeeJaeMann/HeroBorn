@@ -20,6 +20,17 @@ public class EnemyBehavior : MonoBehaviour
         MoveToNextPatrolLocation();
     }
 
+    private void Update()
+    {
+        // Check how far the NavMeshAgent component currently is from it's set destiantion
+        //  and if Unity is computing a path to the next NavMeshAgent component
+        if(_agent.remainingDistance < 0.2f && !_agent.pathPending)
+        {
+            // We are very close to our destination and no other path is being computed
+            MoveToNextPatrolLocation();
+        }
+    }
+
     // OnTriggerEnter() is called whenever an object enters this object's Sphere Collider radius
     // It stores a reference to the object's Collider component
     void OnTriggerEnter(Collider other)
@@ -55,9 +66,18 @@ public class EnemyBehavior : MonoBehaviour
 
     void MoveToNextPatrolLocation()
     {
+        // Ensure our locations is not empty
+        if (locations.Count == 0) return;
         // Sets destination
         // destination is a Vector3 position in 3D space
         // .position references the list element Vector3 position (patrol point)
         _agent.destination = locations[_locationIndex].position;
+
+        // Increment location index
+        // By using % this will reset the index to 0
+        // index (1) + 1 % locations.Count (4)
+        // 2 % 4 = 2
+        // 4 % 4 = 0
+        _locationIndex = (_locationIndex + 1) % locations.Count;
     }
 }
