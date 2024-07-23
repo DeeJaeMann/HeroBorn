@@ -14,6 +14,9 @@ public class EnemyBehavior : MonoBehaviour
     private int _locationIndex = 0;
     private NavMeshAgent _agent;
 
+    // private variable with public backing variable EnemyLives
+    private int _lives = 3;
+
     private void Start()
     {
         _agent = GetComponent<NavMeshAgent>();
@@ -51,6 +54,15 @@ public class EnemyBehavior : MonoBehaviour
         }
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        // Check if the collider is a bullet
+        if(collision.gameObject.name == "Bullet(Clone)")
+        {
+            EnemyLives--;
+            Debug.Log("Critical hit!");
+        }
+    }
 
     // OnTriggerExit() is called whenever an object leaves this object's Sphere Collider radius
     void OnTriggerExit(Collider other)
@@ -87,5 +99,23 @@ public class EnemyBehavior : MonoBehaviour
         // 2 % 4 = 2
         // 4 % 4 = 0
         _locationIndex = (_locationIndex + 1) % locations.Count;
+    }
+
+    public int EnemyLives
+    {
+        get { return _lives; }
+
+        // Only the parent class can set this
+        private set
+        {
+            _lives = value;
+
+            // Check if the enemy should be 'dead'
+            if (_lives <= 0)
+            {
+                Destroy(this.gameObject);
+                Debug.Log("Enemy down.");
+            }
+        }
     }
 }
